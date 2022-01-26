@@ -12,7 +12,7 @@ import 'package:weather/services/Apiservices.dart';
 class WebServices{
 
 
-static  Future<void> getData(String url,List clist,List wlist,List<Daily> dlist,List<HourlyModel> hlist) async {
+static  Future<void> getData(String url,List clist,List<Weatherlist> wlist,List<Daily> dlist,List<HourlyModel> hlist) async {
    // var httpClient = new HttpClient();
     var response = await http.get(Uri.parse(url),
     // print(request.body);
@@ -65,8 +65,13 @@ static  Future<void> getData(String url,List clist,List wlist,List<Daily> dlist,
         hlist.add(hmodel);
          print("daily${hlist.length}");
       });
-       // var wetlist = dailylist[0]['weather'];
-       // print("we...${wetlist}");
+       var wetlist = dailylist[0]['weather'];
+       print("we...${wetlist[0]['description']}");
+      wetlist.forEach((element) {
+        Weatherlist wmodel = Weatherlist.fromJson(element);
+        wlist.add(wmodel);
+        print("daily${wlist.length}");
+      });
       // print("tempc....${currlist[0].tempC}");
       // var condition = current['condition'];
       // Condition con;

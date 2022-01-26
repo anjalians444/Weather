@@ -31,7 +31,8 @@ class HomeState extends State<Home> {
   String log ="";
   final Geolocator geolocator = Geolocator();
   late Position _currentPosition;
-  late String currentAddress;
+   late String currentAddress;
+ static  String cityname = "";
   String url ="";
   List<LocationModel> loclist =[];
   List<Current> currlist = [];
@@ -76,35 +77,35 @@ class HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     _determinePosition();
-     Future.delayed(Duration(seconds: 1),(){
+     Future.delayed(Duration(seconds: 2),(){
       _getCurrentLocation();
     });
 
 //getdata();
   }
-  getdata() async{
-    print("address...${currentAddress}");
-    setState(() {
-      load = true;
-    });
-
-    await WebServices.weatherRequest(context,url,loclist,currlist,conlist);
-    print("curent....${loclist[0].name}");
-    setState(() {
-      name = loclist[0].name.toString();
-      tempc = currlist[0].tempC.toString();
-      tempf = currlist[0].tempF.toString();
-      presurein = currlist[0].pressureIn.toString();
-      presuremb = currlist[0].pressureMb.toString();
-      air = currlist[0].isDay.toString();
-      textValue = tempc.toString();
-      windde = currlist[0].windDegree.toString();
-      winddir = currlist[0].windDir.toString();
-      windkph = currlist[0].windKph.toString();
-      windmph = currlist[0].windMph.toString();
-      load = false;
-    });
-  }
+  // getdata() async{
+  //   print("address...${currentAddress}");
+  //   setState(() {
+  //     load = true;
+  //   });
+  //
+  //   await WebServices.weatherRequest(context,url,loclist,currlist,conlist);
+  //   print("curent....${loclist[0].name}");
+  //   setState(() {
+  //     name = loclist[0].name.toString();
+  //     tempc = currlist[0].tempC.toString();
+  //     tempf = currlist[0].tempF.toString();
+  //     presurein = currlist[0].pressureIn.toString();
+  //     presuremb = currlist[0].pressureMb.toString();
+  //     air = currlist[0].isDay.toString();
+  //     textValue = tempc.toString();
+  //     windde = currlist[0].windDegree.toString();
+  //     winddir = currlist[0].windDir.toString();
+  //     windkph = currlist[0].windKph.toString();
+  //     windmph = currlist[0].windMph.toString();
+  //     load = false;
+  //   });
+  // }
 
   @override
 
@@ -116,7 +117,7 @@ class HomeState extends State<Home> {
        // iconTheme: ,
         title: Center(child: Text("Weather",style: TextStyle(color: MyColors.whiteColor,fontSize: 18),)),),
       drawer: Drawers(),
-        body:Stack(
+        body: Stack(
           children: [
             SingleChildScrollView(
               child: Column(
@@ -132,7 +133,9 @@ class HomeState extends State<Home> {
 
                           Container(
                             alignment: Alignment.center,
-                            child: Center(child: Text("City: ${name}",style: TextStyle(color: MyColors.blackColor,fontSize: 16,fontWeight: FontWeight.w700),)),
+                            child: Center(
+                                child: Text("City: ${cityname}",style: TextStyle(color: MyColors.blackColor,fontSize: 16,fontWeight: FontWeight.w700),)
+                            ),
                           ),              ],
                       ),
                   hSizedBox1,
@@ -170,7 +173,8 @@ class HomeState extends State<Home> {
                                           hSizedBox,
                                           Image.asset("assets/in.png",height: 80,width: 100,color: MyColors.whiteColor,),
                                           //hSizedBox1,
-                                          Text(" PresureIn:- \n     ${presurein} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                                          // ${presurein}
+                                          Text(" PresureIn:- \n ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
                                         ],
                                       ),
                                     ),
@@ -201,7 +205,7 @@ class HomeState extends State<Home> {
                                           hSizedBox2,
                                           Image.asset("assets/mb.png",height: 60,width: 60,color: MyColors.whiteColor,),
                                           hSizedBox1,
-                                          Text(" PresureMb:- \n     ${presuremb} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                                          Text(" PresureMb:- \n",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
                                         ],
                                       ),
                                     )),
@@ -209,7 +213,7 @@ class HomeState extends State<Home> {
                             ),
                             GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => WeatherPage(key: GlobalKeys.home,lat: lat,longi: log, address: currentAddress,)));
+                           currentAddress == null || currentAddress == ""?CircularProgressIndicator():     Navigator.push(context, MaterialPageRoute(builder: (_) => WeatherPage(key: GlobalKeys.home,lat: lat,longi: log, address: currentAddress,)));
                               },
                               child: Container(
                                 height: 100,
@@ -225,184 +229,189 @@ class HomeState extends State<Home> {
                                       decoration: BoxDecoration(
                                         gradient: MyColors.gradient,
                                         // color: Color(0xFF005D6C),
+                                        image:DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage("assets/weather.jpg")
+                                        ),
                                         borderRadius: BorderRadius.circular(30.0),
                                       ),
-                                      child: Center(
-                                        child: Column(
-                                          children: [
-                                            hSizedBox3,
-                                            Container(
-                                              padding: EdgeInsets.only(left: 22),
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                children: [
-                                                  Container(child: Text("C°",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w700),),),
-                                                  Switch(
-                                                    onChanged: toggleSwitch,
-                                                    value: isSwitched,
-                                                    activeColor: Colors.blue,
-                                                    activeTrackColor: Colors.yellow,
-                                                    inactiveThumbColor: Colors.redAccent,
-                                                    inactiveTrackColor: Colors.orange,
-                                                  ),
-                                                  Container(child: Text("F°",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w700),),),
-
-                                                ],
-                                              ),
-                                            ),
-                                            // Image.asset("assets/mb.png",height: 60,width: 60,color: MyColors.whiteColor,),
-                                            hSizedBox,
-                                            Text(" Temprature:- \n     ${textValue} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                          ],
-                                        ),
-                                      )),
+                                      // child: Center(
+                                      //   child: Column(
+                                      //     children: [
+                                      //       hSizedBox3,
+                                      //       Container(
+                                      //         padding: EdgeInsets.only(left: 22),
+                                      //         alignment: Alignment.center,
+                                      //         child: Row(
+                                      //           children: [
+                                      //             Container(child: Text("C°",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w700),),),
+                                      //             Switch(
+                                      //               onChanged: toggleSwitch,
+                                      //               value: isSwitched,
+                                      //               activeColor: Colors.blue,
+                                      //               activeTrackColor: Colors.yellow,
+                                      //               inactiveThumbColor: Colors.redAccent,
+                                      //               inactiveTrackColor: Colors.orange,
+                                      //             ),
+                                      //             Container(child: Text("F°",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w700),),),
+                                      //
+                                      //           ],
+                                      //         ),
+                                      //       ),
+                                      //       // Image.asset("assets/mb.png",height: 60,width: 60,color: MyColors.whiteColor,),
+                                      //       hSizedBox,
+                                      //       Text(" Temprature:- \n     ${textValue} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                                      //     ],
+                                      //   ),
+                                      // )
+                                  ),
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                                child: Container(
-                                  // padding: EdgeInsets.only(top: 10,bottom: 10),
-                                    decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                      // color: Color(0xFF005D6C),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox2,
-
-                                          Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                                          hSizedBox,
-                                          Text(" Humidity:- \n          ${air} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                                child: Container(
-                                   decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                      // color: Color(0xFF005D6C),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox2,
-
-                                          Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                                          hSizedBox,
-                                          Text(" Wind Degree:- \n            ${windde} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                                child: Container(
-                                  // padding: EdgeInsets.only(top: 10,bottom: 10),
-                                    decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                      // color: Color(0xFF005D6C),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox2,
-
-                                          Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                                          hSizedBox,
-                                          Text(" WindDir:- \n     ${winddir} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                                child: Container(
-                                  // padding: EdgeInsets.only(top: 10,bottom: 10),
-                                    decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                      // color: Color(0xFF005D6C),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox2,
-
-                                          Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                                          hSizedBox,
-                                          Text(" Wind KPH:- \n     ${windkph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                                child: Container(
-                                  // padding: EdgeInsets.only(top: 10,bottom: 10),
-                                    decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                      // color: Color(0xFF005D6C),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox2,
-
-                                          Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                                          hSizedBox,
-                                          Text(" Wind MPH:- \n     ${windmph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
+                            // Container(
+                            //   height: 100,
+                            //   width: 100,
+                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                            //   child: Card(
+                            //     elevation: 5,
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(30)
+                            //     ),
+                            //     child: Container(
+                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                            //         decoration: BoxDecoration(
+                            //           gradient: MyColors.gradient,
+                            //           // color: Color(0xFF005D6C),
+                            //           borderRadius: BorderRadius.circular(30.0),
+                            //         ),
+                            //         child: Center(
+                            //           child: Column(
+                            //             children: [
+                            //               hSizedBox2,
+                            //
+                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                            //               hSizedBox,
+                            //               Text(" Humidity:- \n          ${air} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                            //             ],
+                            //           ),
+                            //         )),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 100,
+                            //   width: 100,
+                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                            //   child: Card(
+                            //     elevation: 5,
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(30)
+                            //     ),
+                            //     child: Container(
+                            //        decoration: BoxDecoration(
+                            //           gradient: MyColors.gradient,
+                            //           // color: Color(0xFF005D6C),
+                            //           borderRadius: BorderRadius.circular(30.0),
+                            //         ),
+                            //         child: Center(
+                            //           child: Column(
+                            //             children: [
+                            //               hSizedBox2,
+                            //
+                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                            //               hSizedBox,
+                            //               Text(" Wind Degree:- \n            ${windde} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                            //             ],
+                            //           ),
+                            //         )),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 100,
+                            //   width: 100,
+                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                            //   child: Card(
+                            //     elevation: 5,
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(30)
+                            //     ),
+                            //     child: Container(
+                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                            //         decoration: BoxDecoration(
+                            //           gradient: MyColors.gradient,
+                            //           // color: Color(0xFF005D6C),
+                            //           borderRadius: BorderRadius.circular(30.0),
+                            //         ),
+                            //         child: Center(
+                            //           child: Column(
+                            //             children: [
+                            //               hSizedBox2,
+                            //
+                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                            //               hSizedBox,
+                            //               Text(" WindDir:- \n     ${winddir} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                            //             ],
+                            //           ),
+                            //         )),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 100,
+                            //   width: 100,
+                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                            //   child: Card(
+                            //     elevation: 5,
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(30)
+                            //     ),
+                            //     child: Container(
+                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                            //         decoration: BoxDecoration(
+                            //           gradient: MyColors.gradient,
+                            //           // color: Color(0xFF005D6C),
+                            //           borderRadius: BorderRadius.circular(30.0),
+                            //         ),
+                            //         child: Center(
+                            //           child: Column(
+                            //             children: [
+                            //               hSizedBox2,
+                            //
+                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                            //               hSizedBox,
+                            //               Text(" Wind KPH:- \n     ${windkph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                            //             ],
+                            //           ),
+                            //         )),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 100,
+                            //   width: 100,
+                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                            //   child: Card(
+                            //     elevation: 5,
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(30)
+                            //     ),
+                            //     child: Container(
+                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                            //         decoration: BoxDecoration(
+                            //           gradient: MyColors.gradient,
+                            //           // color: Color(0xFF005D6C),
+                            //           borderRadius: BorderRadius.circular(30.0),
+                            //         ),
+                            //         child: Center(
+                            //           child: Column(
+                            //             children: [
+                            //               hSizedBox2,
+                            //
+                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                            //               hSizedBox,
+                            //               Text(" Wind MPH:- \n     ${windmph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                            //             ],
+                            //           ),
+                            //         )),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -411,14 +420,15 @@ class HomeState extends State<Home> {
                 ],
               ),
             ),
-
-         load == true?   Container(
+            cityname == null || cityname == "" ||  cityname.isEmpty?
+             Container(
            height: MediaQuery.of(context).size.height,
               color: MyColors.blackColor54,
               child: Center(child: CircularProgressIndicator(
                 color: MyColors.skyblue,
               )) ,
-            ): Container()
+            )
+                 : Container()
           ],
         )
 
@@ -486,23 +496,28 @@ class HomeState extends State<Home> {
           _currentPosition.latitude, _currentPosition.longitude);
 
       Placemark place = p[0];
-
-      setState(() async{
-        lat = await "${_currentPosition.latitude}";
-        log = await"${_currentPosition.longitude}";
-        currentAddress = await "${place.locality}";
-        ApiServices.address = currentAddress;
-
-        //set address api
-       // url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${log}&exclude=daily&appid=dcf95ed21773ea83a9fc1f29c2f76647&units=metric";
-        url =  await ApiServices.base_url+currentAddress+ApiServices.api;
-        print(ApiServices.address);
-        print(lat+ log+  currentAddress);
-        getdata();
-      });
+      lat = await "${_currentPosition.latitude}";
+      log = await"${_currentPosition.longitude}";
+      currentAddress = await "${place.locality}";
+      // cityname = await currentAddress.toString();
+      print("address...${currentAddress}");
+      ApiServices.address = currentAddress;
+      cityname =  currentAddress.toString();
+      print("cityname${cityname}");
+      //set address api
+      // url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${log}&exclude=daily&appid=dcf95ed21773ea83a9fc1f29c2f76647&units=metric";
+      url =  await ApiServices.base_url+currentAddress+ApiServices.api;
+      print(ApiServices.address);
+      print(lat+ log+  currentAddress);
       //getdata();
       setState(() {
 
+      });
+
+
+      //getdata();
+      setState(() {
+        print("city"+ ApiServices.address);
       });
     } catch (e) {
       print(e);

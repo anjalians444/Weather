@@ -9,4 +9,5 @@ class ApiServices{
   static String onapicall = "https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${longi}&exclude=hourly,daily&appid=${key}";
   static String lat = "";
   static String longi ="";
+  static String img_url = "http://openweathermap.org/img/w/";
 }

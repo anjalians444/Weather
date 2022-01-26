@@ -32,14 +32,14 @@ class MyColors{
     tileMode: TileMode.repeated, // repeats the gradient over the canvas
   );
   static const gradient2 = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    //Alignment(0.8, 0.0), // 10% of the width, so there are ten blinds.
+    // begin: Alignment.centerLeft,
+    // end: Alignment.center,
+   // Alignment(0.8, 0.0), // 10% of the width, so there are ten blinds.
     colors: <Color>[
       orange,
       Colors.yellow,
       orange
     ], // red to yellow
-    tileMode: TileMode.repeated, // repeats the gradient over the canvas
+    //tileMode: TileMode.repeated, // repeats the gradient over the canvas
   );
 }

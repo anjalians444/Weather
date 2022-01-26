@@ -7,6 +7,7 @@ import 'package:weather/globalkey.dart';
 import 'package:weather/model/LocationModel.dart';
 import 'package:weather/model/WeatherModel.dart';
 import 'package:weather/model/currenmodel.dart';
+import 'package:weather/services/Apiservices.dart';
 import 'package:weather/widget/getdatetime.dart';
 import 'package:weather/widget/mycolor.dart';
 import 'package:weather/widget/sizedBox.dart';
@@ -45,6 +46,7 @@ class WeatherDetailsState extends State<WeatherDetails> {
   var d12;
   var sunr;
   var sunset;
+
   @override
   void initState() {
     super.initState();
@@ -54,7 +56,7 @@ class WeatherDetailsState extends State<WeatherDetails> {
       tempc = widget.model.temp.toString();
       print("tempccc${widget.textValue}");
       print("tempccc${tempc}");
-      //icon_url = "http://openweathermap.org/img/w/" + widget.weathermodel[0].icon.toString() +".png";
+      icon_url = ApiServices.img_url+ widget.weathermodel[0].icon.toString() +".png";
      // time = getCustomFormattedDateTime(widget.locmodel[0].localtime.toString(), "EEEE, MMM,DD");
       print(time);
       var currentdate = widget.model.dt;
@@ -134,15 +136,17 @@ class WeatherDetailsState extends State<WeatherDetails> {
                 children: [
                   Text("${widget.textValue}",style: MyTextStyle.heading,),
 
-                  widget.weathermodel[0].description  == "haze" ?Image.asset("assets/haze.png",color: MyColors.greycolor,height: 100,width: 100,): Container(
-                    height: 80,
-                    width: 80,
+                  widget.weathermodel[0].description  == "haze" ?Image.asset("assets/haze.png",color: MyColors.greycolor,height: 100,width: 100,):
+                  icon_url == null || icon_url == ""? Container(child: Center(child: CircularProgressIndicator(color: MyColors.skyblue,strokeWidth: 5,))): Container(
+                    height: 120,
+                    width: 120,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
-                      color: MyColors.blackColor54,
-                      // image: DecorationImage(
-                      //   image: NetworkImage('${icon_url}')
-                      // )
+                     // color: MyColors.orange,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage('${icon_url}'),
+                      )
                     ),
 
                   ),
@@ -151,7 +155,7 @@ class WeatherDetailsState extends State<WeatherDetails> {
                 ],
               ),
             ),
-            hSizedBox,
+           // hSizedBox,
             Align(
               alignment: Alignment.topLeft,
               child: Container(
@@ -273,7 +277,7 @@ class WeatherDetailsState extends State<WeatherDetails> {
                           child: Column(
                             children: [
                               _buildlistday(widget.dailymodel[index],index),
-                              SizedBox(height: 5,),
+                              SizedBox(height: 4,),
                               Divider()
                             ],
                           ));
@@ -293,17 +297,21 @@ class WeatherDetailsState extends State<WeatherDetails> {
     return Column(
       children: [
          Text('${new DateFormat.jm().format(today.add(new Duration(hours: index))).toString()}',style: MyTextStyle.bodytext4,),
-        hSizedBox1,
+        hSizedBox,
          Container(
-           height: 20,
-           width: 20,
+           height: 40,
+           width: 40,
            decoration: BoxDecoration(
-             color:  Colors.black,
-             borderRadius:  BorderRadius.circular(60)
+            // color:  Colors.black,
+             borderRadius:  BorderRadius.circular(60),
+    // image: DecorationImage(
+    // fit: BoxFit.cover,
+    // image: NetworkImage(ApiServices.img_url+"${hmodel.weather![0].icon.toString()}.png"),
+    // )
            ),
-           child: Image.asset("assets/weather.png"),
+           child: Image.network(ApiServices.img_url+"${hmodel.weather![0].icon.toString()}.png",height: 150,width: 100,),
          ),
-        hSizedBox1,
+        hSizedBox,
      widget.textValue == widget.tempc? Text("${hmodel.temp.toString()}"+"°C",style: MyTextStyle.bodytext4,):  Text("${(double.parse(hmodel.temp.toString()).round() * 9/5) + 32}"+"°F",style: MyTextStyle.bodytext4,),
       ],
 
@@ -317,16 +325,18 @@ class WeatherDetailsState extends State<WeatherDetails> {
       children: [
         Text('${
     new DateFormat('EEE , MMM,DD').format(today.add(new Duration(days: index))).toString()}',style: MyTextStyle.bodytext6,),
-        wSizedBox5,
+        wSizedBox4,
 
         widget.textValue == widget.tempc?   Text("${dmodel.temp!.max}" +"/"+ "${dmodel.temp!.min}"+  "°C",style: MyTextStyle.bodytext4,):Text("${(double.parse(dmodel.temp!.max.toString()).round()* 9/5) + 32  }" +"/"+ "${(double.parse(dmodel.temp!.min.toString()).round()* 9/5) + 32 }"+  "°F",style: MyTextStyle.bodytext4,),
         Container(
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-              color:  MyColors.orange,
-              borderRadius:  BorderRadius.circular(60)
-          ),
+          height: 40,
+          width: 40,
+          // decoration: BoxDecoration(
+          //  //   color:  MyColors.orange,
+          //  //   borderRadius:  BorderRadius.circular(60)
+          // ),
+       child: Image.network(ApiServices.img_url+"${dmodel.weather![0].icon.toString()}.png",height: 150,width: 100,),
+
         ),
       ],
 

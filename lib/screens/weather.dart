@@ -39,6 +39,7 @@ class _WeatherPageState extends State<WeatherPage> {
   String des ="";
   String temp = "";
   int num = 0;
+
   //String
 
   @override
@@ -53,7 +54,9 @@ class _WeatherPageState extends State<WeatherPage> {
     getdata();
   }
   getdata() async{
-
+ setState(() {
+   load = true;
+ });
     await WebServices.getData(url,cmodel,wlist,dlist,hlist);
     setState(() {
       temp = cmodel[0].temp.toString();
@@ -62,7 +65,7 @@ class _WeatherPageState extends State<WeatherPage> {
       textValue =tempf;
       des = wlist[0].description.toString();
      // tempf = cmodel[0].temp.toString()+"°F";
-
+  load = false;
     });
 
     print("num${num}");
@@ -97,7 +100,15 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     body: Column(
+     body: load == true? Container(
+       height: MediaQuery.of(context).size.height,
+       width: MediaQuery.of(context).size.width,
+       child: Center(
+         child: CircularProgressIndicator(
+           color: MyColors.skyblue,
+         ),
+       ),
+     ) :Column(
        children: [
          hSizedBox4,
          hSizedBox,
