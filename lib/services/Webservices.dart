@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather/globalkey.dart';
+import 'package:weather/model/ForcastModel.dart';
 import 'package:weather/model/LocationModel.dart';
 import 'package:weather/model/WeatherModel.dart';
 import 'package:weather/model/currenmodel.dart';
+import 'package:weather/model/dateModel.dart';
 import 'package:weather/services/Apiservices.dart';
 
 class WebServices{
@@ -104,10 +106,6 @@ static  Future<void> getData(String url,List clist,List<Weatherlist> wlist,List<
    //  print(temp.toString());
    //  return { 'description': current, 'temp': temp };
   }
-
-  // main() async {
-  //   print(await getData());
-  // }
  static Future<void>weatherRequest(BuildContext context,String url,List<LocationModel> loclist,List<Current> currlist, List<Condition> conlist)async{
     var response=await http.get(Uri.parse(url),
         // body:convert.jsonEncode(request),
@@ -150,5 +148,101 @@ static  Future<void> getData(String url,List clist,List<Weatherlist> wlist,List<
       throw Exception('error');
     }
   }
+
+  
+  static Future<void> AirPolutionRequest(BuildContext context, String lat,String lng, List<MainModel> mainlist, List<ComponentsModel> componentlist) async{
+
+  print("lattitude${lat} ")
+;  var response = await http.get(Uri.parse(ApiServices.airp_baseurl+"lat=${lat}&lon=${lng}&appid=dcf95ed21773ea83a9fc1f29c2f76647"),
+        // body:convert.jsonEncode(request),
+        headers: {
+          "content-type": "application/json",
+          "accept": "application/json"
+        });
+    print("res"+response.body);
+
+    Map<String , dynamic> jsonResponse = await json.decode(utf8.decode(response.bodyBytes));
+    print("jsonres"+jsonResponse.toString());
+    if (response.statusCode == 200) {
+      print("response${response.body}");
+    //  var list = j
+      var list = jsonResponse['list'];
+      print("list${list.toString()}");
+      var main = list[0]['main'];
+      var component = list[0]["components"];
+      print("list..."+main.toString());
+      MainModel mainModel;
+      mainModel = MainModel.fromJson(main);
+      mainlist.add(mainModel);
+      print("listlength${list.toString()}");
+      print("....${list[0]['aqi']}");
+      print("....${mainlist[0].aqi}");
+      ComponentsModel  componentsModel;
+      componentsModel = ComponentsModel.fromJson(main);
+      componentlist.add(componentsModel);
+      print("listlength${list.toString()}");
+      print("....${list[0]['co']}");
+      print("....${componentlist.length}");
+    } else {
+      throw Exception('error');
+    }
+  }
+
+static Future<void> AirPolutionForcastRequest(BuildContext context, String lat,String lng,List<DateModel> datelist,List<ForcastListModel> forcastmodel, List<MainModel> mainlist , List<ComponentsModel> compolist) async{
+
+  print("lattitude${lat} ");
+  var response = await http.get(Uri.parse(ApiServices.airforcast_baseurl+"lat=${lat}&lon=${lng}&appid=dcf95ed21773ea83a9fc1f29c2f76647"),
+      // body:convert.jsonEncode(request),
+      headers: {
+        "content-type": "application/json",
+        "accept": "application/json"
+      });
+  print("res"+response.body);
+
+  Map<String , dynamic> jsonResponse = await json.decode(utf8.decode(response.bodyBytes));
+  print("jsonres"+jsonResponse.toString());
+  if (response.statusCode == 200) {
+    print("response${response.body}");
+    //  var list = j
+  //  var main = list[0]['main'];
+    var list = jsonResponse['list'];
+    list.forEach((element) {
+
+      print("element"+element['dt'].toString());
+      DateModel dtModel = DateModel.fromJson(element);
+      datelist.add(dtModel);
+      //  print("daily${mainlist.length}");
+      print("date${datelist[0].date}");
+      var main = element['main'];
+      MainModel mainModel = MainModel.fromJson(main);
+      mainlist.add(mainModel);
+     //  print("daily${mainlist.length}");
+       print("main..${mainlist[0].aqi}");
+
+      var compo = element['components'];
+      print("mainlistttttt${compo.toString()}");
+      ComponentsModel componentsModel;
+      componentsModel = ComponentsModel.fromJson(compo);
+      compolist.add(componentsModel);
+     // print("componentmodel${componentsModel.co}");
+
+
+    //  var component = list[0]["components"];
+      print("listlength${list.toString()}");
+      print("....${mainlist[0].aqi}");
+
+
+
+    });
+    //var main = list[0]['main'];
+
+ForcastListModel forModel = ForcastListModel.fromJson(jsonResponse);
+    forcastmodel.add(forModel);
+    print("length    ${forcastmodel.length}");
+    print("we...${list[0]['dt']}");
+  } else {
+    throw Exception('error');
+  }
+}
 
 }

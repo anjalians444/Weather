@@ -1,11 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/model/LocationModel.dart';
 import 'package:weather/model/WeatherModel.dart';
 import 'package:weather/model/currenmodel.dart';
 import 'package:weather/screens/Weather_details.dart';
+import 'package:weather/screens/airQulity.dart';
+import 'package:weather/screens/air_quality.dart';
+import 'package:weather/screens/bottomNavigation.dart';
 import 'package:weather/screens/drawer.dart';
 import 'package:weather/screens/weather.dart';
 import 'package:weather/services/Apiservices.dart';
@@ -52,6 +56,7 @@ class HomeState extends State<Home> {
   bool load = false;
   String url2 ="";
 
+
   void toggleSwitch(bool value) {
 
     if(isSwitched == false)
@@ -83,158 +88,123 @@ class HomeState extends State<Home> {
 
 //getdata();
   }
-  // getdata() async{
-  //   print("address...${currentAddress}");
-  //   setState(() {
-  //     load = true;
-  //   });
-  //
-  //   await WebServices.weatherRequest(context,url,loclist,currlist,conlist);
-  //   print("curent....${loclist[0].name}");
-  //   setState(() {
-  //     name = loclist[0].name.toString();
-  //     tempc = currlist[0].tempC.toString();
-  //     tempf = currlist[0].tempF.toString();
-  //     presurein = currlist[0].pressureIn.toString();
-  //     presuremb = currlist[0].pressureMb.toString();
-  //     air = currlist[0].isDay.toString();
-  //     textValue = tempc.toString();
-  //     windde = currlist[0].windDegree.toString();
-  //     winddir = currlist[0].windDir.toString();
-  //     windkph = currlist[0].windKph.toString();
-  //     windmph = currlist[0].windMph.toString();
-  //     load = false;
-  //   });
-  // }
-
   @override
 
   Widget build(BuildContext context) {
 
+      ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(360, 690),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: MyColors.skyblue,
-       // iconTheme: ,
-        title: Center(child: Text("Weather",style: TextStyle(color: MyColors.whiteColor,fontSize: 18),)),),
-      drawer: Drawers(),
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                      hSizedBox2,
-                     // hSizedBox2,
-                      Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Center(child: Text("Weather",style: TextStyle(color: MyColors.blackColor,fontSize: 25,fontWeight: FontWeight.w700),)),
-                          ),
-
-                          Container(
-                            alignment: Alignment.center,
-                            child: Center(
-                                child: Text("City: ${cityname}",style: TextStyle(color: MyColors.blackColor,fontSize: 16,fontWeight: FontWeight.w700),)
+        appBar: AppBar(
+          backgroundColor: MyColors.skyblue,
+         // iconTheme: ,
+          title: Center(child: Text("Weather",style: TextStyle(color: MyColors.whiteColor,fontSize: 18),)),),
+       // drawer: Drawers(),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                        hSizedBox2,
+                       // hSizedBox2,
+                        Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Center(child: Text("Weather",style: TextStyle(color: MyColors.blackColor,fontSize: 25,fontWeight: FontWeight.w700),)),
                             ),
-                          ),              ],
-                      ),
-                  hSizedBox1,
-                  Material(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 15,right: 15,bottom: 30),
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      child: GridView.custom(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                        childrenDelegate: SliverChildListDelegate(
-                          [
+
                             Container(
-                                height: 100,
-                                width: 100,
-                                margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                                child: Card(
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                  ),
-                                  child: Container(
-                                    // padding: EdgeInsets.only(top: 10,bottom: 10),
-                                    decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                      // color: Color(0xFF005D6C),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      // image: DecorationImage(
-                                      //   colorFilter: ColorFilter.mode(Colors.blue.withOpacity(0.60),
-                                      //       BlendMode.dstATop),
-                                      //     image: AssetImage("assets/.png"))
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox,
-                                          Image.asset("assets/in.png",height: 80,width: 100,color: MyColors.whiteColor,),
-                                          //hSizedBox1,
-                                          // ${presurein}
-                                          Text(" PresureIn:- \n ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
+                              alignment: Alignment.center,
+                              child: Center(
+                                  child: Text("City: ${cityname}",style: TextStyle(color: MyColors.blackColor,fontSize: 16,fontWeight: FontWeight.w700),)
+                              ),
+                            ),              ],
+                        ),
+                    hSizedBox1,
+                    Material(
+                      child: Container(
+                        padding: EdgeInsets.only(left: 15,right: 15,bottom: 30),
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: GridView.custom(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                          childrenDelegate: SliverChildListDelegate(
+                            [
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => Air_Quality (lat: lat, lng: log,)));
+                                },
                                 child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: MyColors.gradient,
-                                     // color: Color(0xFF005D6C),
-                                        borderRadius: BorderRadius.circular(30.0),
-                                        // image: DecorationImage(
-                                        //   colorFilter: ColorFilter.mode(Colors.blue.withOpacity(0.60),
-                                        //       BlendMode.dstATop),
-                                        //     image: AssetImage("assets/.png"))
-                                     ),
-                                    child: Center(
-                                      child: Column(
-                                        children: [
-                                          hSizedBox2,
-                                          Image.asset("assets/mb.png",height: 60,width: 60,color: MyColors.whiteColor,),
-                                          hSizedBox1,
-                                          Text(" PresureMb:- \n",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                                        ],
+                                    height: 100,
+                                    width: 100,
+                                    margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                                    child: Card(
+                                      elevation: 5,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30)
+                                      ),
+                                      child: Container(
+                                        // padding: EdgeInsets.only(top: 10,bottom: 10),
+                                        decoration: BoxDecoration(
+                                          gradient: MyColors.gradient,
+                                          // color: Color(0xFF005D6C),
+                                          borderRadius: BorderRadius.circular(30.0),
+                                          image: DecorationImage(
+                                            colorFilter: ColorFilter.mode(Colors.blue.withOpacity(0.60),
+                                                BlendMode.dstATop),
+                                              image: AssetImage("assets/quality.jpg",),
+                                          fit: BoxFit.cover
+
+                                          )
+                                        ),
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              hSizedBox3,
+                                             // Image.asset("assets/in.png",height: 80,width: 100,color: MyColors.whiteColor,),
+                                              //hSizedBox1,
+                                              // ${presurein}
+                                              Text(" AirQuality",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     )),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                           currentAddress == null || currentAddress == ""?CircularProgressIndicator():     Navigator.push(context, MaterialPageRoute(builder: (_) => WeatherPage(key: GlobalKeys.home,lat: lat,longi: log, address: currentAddress,)));
-                              },
-                              child: Container(
-                                height: 100,
-                                width: 100,
-                                margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                                child: Card(
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30)
-                                  ),
-                                  child: Container(
-                                    // padding: EdgeInsets.only(top: 10,bottom: 10),
+                              GestureDetector(
+                                onTap: (){
+                                  currentAddress == null || currentAddress == ""?CircularProgressIndicator():     Navigator.push(context, MaterialPageRoute(builder: (_) => WeatherPage(key: GlobalKeys.home,lat: lat,longi: log, address: currentAddress,)));
+                                },
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                                  child: Card(
+                                    elevation: 5,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30)
+                                    ),
+                                    child: Container(
+                                      // padding: EdgeInsets.only(top: 10,bottom: 10),
                                       decoration: BoxDecoration(
                                         gradient: MyColors.gradient,
                                         // color: Color(0xFF005D6C),
                                         image:DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage("assets/weather.jpg")
+                                            fit: BoxFit.cover,
+                                            image: AssetImage("assets/weather.jpg")
                                         ),
                                         borderRadius: BorderRadius.circular(30.0),
                                       ),
+                                      child:Padding(
+                                        padding:  EdgeInsets.all(27.0),
+                                        child: Text("Weather",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w600,fontSize: 18.sp),),
+                                      ) ,
                                       // child: Center(
                                       //   child: Column(
                                       //     children: [
@@ -264,175 +234,208 @@ class HomeState extends State<Home> {
                                       //     ],
                                       //   ),
                                       // )
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            // Container(
-                            //   height: 100,
-                            //   width: 100,
-                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                            //   child: Card(
-                            //     elevation: 5,
-                            //     shape: RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(30)
-                            //     ),
-                            //     child: Container(
-                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
-                            //         decoration: BoxDecoration(
-                            //           gradient: MyColors.gradient,
-                            //           // color: Color(0xFF005D6C),
-                            //           borderRadius: BorderRadius.circular(30.0),
-                            //         ),
-                            //         child: Center(
-                            //           child: Column(
-                            //             children: [
-                            //               hSizedBox2,
-                            //
-                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                            //               hSizedBox,
-                            //               Text(" Humidity:- \n          ${air} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                            //             ],
-                            //           ),
-                            //         )),
-                            //   ),
-                            // ),
-                            // Container(
-                            //   height: 100,
-                            //   width: 100,
-                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                            //   child: Card(
-                            //     elevation: 5,
-                            //     shape: RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(30)
-                            //     ),
-                            //     child: Container(
-                            //        decoration: BoxDecoration(
-                            //           gradient: MyColors.gradient,
-                            //           // color: Color(0xFF005D6C),
-                            //           borderRadius: BorderRadius.circular(30.0),
-                            //         ),
-                            //         child: Center(
-                            //           child: Column(
-                            //             children: [
-                            //               hSizedBox2,
-                            //
-                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                            //               hSizedBox,
-                            //               Text(" Wind Degree:- \n            ${windde} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                            //             ],
-                            //           ),
-                            //         )),
-                            //   ),
-                            // ),
-                            // Container(
-                            //   height: 100,
-                            //   width: 100,
-                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                            //   child: Card(
-                            //     elevation: 5,
-                            //     shape: RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(30)
-                            //     ),
-                            //     child: Container(
-                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
-                            //         decoration: BoxDecoration(
-                            //           gradient: MyColors.gradient,
-                            //           // color: Color(0xFF005D6C),
-                            //           borderRadius: BorderRadius.circular(30.0),
-                            //         ),
-                            //         child: Center(
-                            //           child: Column(
-                            //             children: [
-                            //               hSizedBox2,
-                            //
-                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                            //               hSizedBox,
-                            //               Text(" WindDir:- \n     ${winddir} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                            //             ],
-                            //           ),
-                            //         )),
-                            //   ),
-                            // ),
-                            // Container(
-                            //   height: 100,
-                            //   width: 100,
-                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                            //   child: Card(
-                            //     elevation: 5,
-                            //     shape: RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(30)
-                            //     ),
-                            //     child: Container(
-                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
-                            //         decoration: BoxDecoration(
-                            //           gradient: MyColors.gradient,
-                            //           // color: Color(0xFF005D6C),
-                            //           borderRadius: BorderRadius.circular(30.0),
-                            //         ),
-                            //         child: Center(
-                            //           child: Column(
-                            //             children: [
-                            //               hSizedBox2,
-                            //
-                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                            //               hSizedBox,
-                            //               Text(" Wind KPH:- \n     ${windkph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                            //             ],
-                            //           ),
-                            //         )),
-                            //   ),
-                            // ),
-                            // Container(
-                            //   height: 100,
-                            //   width: 100,
-                            //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
-                            //   child: Card(
-                            //     elevation: 5,
-                            //     shape: RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(30)
-                            //     ),
-                            //     child: Container(
-                            //       // padding: EdgeInsets.only(top: 10,bottom: 10),
-                            //         decoration: BoxDecoration(
-                            //           gradient: MyColors.gradient,
-                            //           // color: Color(0xFF005D6C),
-                            //           borderRadius: BorderRadius.circular(30.0),
-                            //         ),
-                            //         child: Center(
-                            //           child: Column(
-                            //             children: [
-                            //               hSizedBox2,
-                            //
-                            //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
-                            //               hSizedBox,
-                            //               Text(" Wind MPH:- \n     ${windmph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
-                            //             ],
-                            //           ),
-                            //         )),
-                            //   ),
-                            // ),
-                          ],
+                              Container(
+                                height: 100,
+                                width: 100,
+                                margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                                child: Card(
+                                  elevation: 5,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30)
+                                  ),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: MyColors.gradient,
+                                       // color: Color(0xFF005D6C),
+                                          borderRadius: BorderRadius.circular(30.0),
+                                          // image: DecorationImage(
+                                          //   colorFilter: ColorFilter.mode(Colors.blue.withOpacity(0.60),
+                                          //       BlendMode.dstATop),
+                                          //     image: AssetImage("assets/.png"))
+                                       ),
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            hSizedBox2,
+                                            Image.asset("assets/mb.png",height: 60,width: 60,color: MyColors.whiteColor,),
+                                            hSizedBox1,
+                                            Text(" PresureMb:- \n",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                                          ],
+                                        ),
+                                      )),
+                                ),
+                              ),
+
+                              // Container(
+                              //   height: 100,
+                              //   width: 100,
+                              //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                              //   child: Card(
+                              //     elevation: 5,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(30)
+                              //     ),
+                              //     child: Container(
+                              //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                              //         decoration: BoxDecoration(
+                              //           gradient: MyColors.gradient,
+                              //           // color: Color(0xFF005D6C),
+                              //           borderRadius: BorderRadius.circular(30.0),
+                              //         ),
+                              //         child: Center(
+                              //           child: Column(
+                              //             children: [
+                              //               hSizedBox2,
+                              //
+                              //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                              //               hSizedBox,
+                              //               Text(" Humidity:- \n          ${air} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                              //             ],
+                              //           ),
+                              //         )),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   height: 100,
+                              //   width: 100,
+                              //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                              //   child: Card(
+                              //     elevation: 5,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(30)
+                              //     ),
+                              //     child: Container(
+                              //        decoration: BoxDecoration(
+                              //           gradient: MyColors.gradient,
+                              //           // color: Color(0xFF005D6C),
+                              //           borderRadius: BorderRadius.circular(30.0),
+                              //         ),
+                              //         child: Center(
+                              //           child: Column(
+                              //             children: [
+                              //               hSizedBox2,
+                              //
+                              //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                              //               hSizedBox,
+                              //               Text(" Wind Degree:- \n            ${windde} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                              //             ],
+                              //           ),
+                              //         )),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   height: 100,
+                              //   width: 100,
+                              //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                              //   child: Card(
+                              //     elevation: 5,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(30)
+                              //     ),
+                              //     child: Container(
+                              //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                              //         decoration: BoxDecoration(
+                              //           gradient: MyColors.gradient,
+                              //           // color: Color(0xFF005D6C),
+                              //           borderRadius: BorderRadius.circular(30.0),
+                              //         ),
+                              //         child: Center(
+                              //           child: Column(
+                              //             children: [
+                              //               hSizedBox2,
+                              //
+                              //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                              //               hSizedBox,
+                              //               Text(" WindDir:- \n     ${winddir} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                              //             ],
+                              //           ),
+                              //         )),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   height: 100,
+                              //   width: 100,
+                              //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                              //   child: Card(
+                              //     elevation: 5,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(30)
+                              //     ),
+                              //     child: Container(
+                              //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                              //         decoration: BoxDecoration(
+                              //           gradient: MyColors.gradient,
+                              //           // color: Color(0xFF005D6C),
+                              //           borderRadius: BorderRadius.circular(30.0),
+                              //         ),
+                              //         child: Center(
+                              //           child: Column(
+                              //             children: [
+                              //               hSizedBox2,
+                              //
+                              //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                              //               hSizedBox,
+                              //               Text(" Wind KPH:- \n     ${windkph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                              //             ],
+                              //           ),
+                              //         )),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   height: 100,
+                              //   width: 100,
+                              //   margin: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
+                              //   child: Card(
+                              //     elevation: 5,
+                              //     shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(30)
+                              //     ),
+                              //     child: Container(
+                              //       // padding: EdgeInsets.only(top: 10,bottom: 10),
+                              //         decoration: BoxDecoration(
+                              //           gradient: MyColors.gradient,
+                              //           // color: Color(0xFF005D6C),
+                              //           borderRadius: BorderRadius.circular(30.0),
+                              //         ),
+                              //         child: Center(
+                              //           child: Column(
+                              //             children: [
+                              //               hSizedBox2,
+                              //
+                              //               Image.asset("assets/weather_logo.png",height: 60,width: 60,),
+                              //               hSizedBox,
+                              //               Text(" Wind MPH:- \n     ${windmph} ",style: TextStyle(color: MyColors.whiteColor,fontWeight: FontWeight.w700,fontSize: 16),),
+                              //             ],
+                              //           ),
+                              //         )),
+                              //   ),
+                              // ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            cityname == null || cityname == "" ||  cityname.isEmpty?
-             Container(
-           height: MediaQuery.of(context).size.height,
-              color: MyColors.blackColor54,
-              child: Center(child: CircularProgressIndicator(
-                color: MyColors.skyblue,
-              )) ,
-            )
-                 : Container()
-          ],
-        )
+              cityname == null || cityname == "" ||  cityname.isEmpty?
+               Container(
+             height: MediaQuery.of(context).size.height,
+                color: MyColors.blackColor54,
+                child: Center(child: CircularProgressIndicator(
+                  color: MyColors.skyblue,
+                )) ,
+              )
+                   : Container()
+            ],
+          )
 
-    );
+      );
+
   }
   _getCurrentLocation() {
     Geolocator

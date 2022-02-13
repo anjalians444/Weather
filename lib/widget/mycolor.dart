@@ -12,14 +12,22 @@ class MyColors{
   static const lightwhite = Color(0xFF362A2A);
   static const bluecolor = Color(0xff1260CC);
   static const textColorAbovePrimaryColor =Color(0xffefefef);
-  static const skyblue = Color(0xff29afce);
+  static const skyblue = Color(0xff00b8A9);
   static const lightskyblue = Colors.cyan;
   static const greenColor = Colors.green;
   static const lightsky = Color(0xFFFE3F2FD);
   static const blackColor = Colors.black;
   static const orange = Color(0xFFDA4C05);
   static const lightorange = Color(0x71E8B197);
+  static const red = Color(0xffff0808);
+  static const lightred = Color(0xfff39393);
+      static const darkred = Color(0xff6e0101);
+  static const purple = Color(0xff860aef);
+  static const light_orange = Color(0xffFFCC80);
+  static const light_green = Color(0xffA5D6A7);
 
+static const yellow = Color(0xffFFFF00);
+static const light_yellow = Color(0xffFFF59D);
   static const gradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

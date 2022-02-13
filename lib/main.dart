@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weather/screens/Home.dart';
 import 'package:weather/screens/splash.dart';
@@ -14,17 +15,51 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: GoogleFonts.montserrat().fontFamily
-      ),
-      home: const Splash(),
+    return ScreenUtilInit(
+      designSize: Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: () =>
+          MaterialApp(
+            debugShowCheckedModeBanner: false,
+            //... other code
+            // builder: (context, widget) {
+            //   //add this line
+            //   ScreenUtil.setContext(context);
+            //   return MediaQuery(
+            //     //Setting font does not change with system font size
+            //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            //     child: Splash(),
+            //   );
+            // },
+            theme: ThemeData(
+                primarySwatch: Colors.blue,
+                fontFamily: GoogleFonts.montserrat().fontFamily,
+                textTheme: TextTheme(
+
+                )
+              // textTheme: TextTheme(
+              //     primarySwatch: Colors.blue,
+              //     fontFamily: GoogleFonts.montserrat().fontFamily
+              //     button: TextStyle(fontSize: 45.sp)
+              // ),
+            ),
+            home: Splash(),
+          ),
     );
-  }
-}
+
+  }}
+//       MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Flutter Demo',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//         fontFamily: GoogleFonts.montserrat().fontFamily
+//       ),
+//       home: const Splash(),
+//     );
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

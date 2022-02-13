@@ -44,6 +44,13 @@ dependencies:
   http: ^0.13.4
   english_words: ^4.0.0
   intl: ^0.17.0
+  flutter_screenutil: ^5.1.1
+  air_quality: ^2.0.0
+  share: ^2.0.4
+  range_slider_dialog: any
+  percent_indicator: ^4.0.0
+  sleek_circular_slider: ^2.0.1
+  syncfusion_flutter_gauges: ^18.2.44
 
 dev_dependencies:
   flutter_test:

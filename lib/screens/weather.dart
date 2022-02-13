@@ -153,7 +153,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
          hSizedBox3,
          Container(
-          // padding: EdgeInsets.only(left: 22),
+          // pa dding: EdgeInsets.only(left: 22),
            alignment: Alignment.center,
            child: Row(
              mainAxisAlignment: MainAxisAlignment.center,
